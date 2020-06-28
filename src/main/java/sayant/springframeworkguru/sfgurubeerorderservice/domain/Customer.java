@@ -1,19 +1,36 @@
 package sayant.springframeworkguru.sfgurubeerorderservice.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Created by sayantjm on 28/6/20
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
 public class Customer extends BaseEntity {
 
-    public Customer(UUID id, Long version, Timestamp createdDate, Timestamp lastUpdatedDate, String customerName, UUID apikey) {
+    @Builder
+    public Customer(UUID id, Long version, Timestamp createdDate, Timestamp lastUpdatedDate, String customerName, UUID apikey, Set<BeerOrder> beerOrders) {
         super(id, version, createdDate, lastUpdatedDate);
         this.customerName = customerName;
         this.apikey = apikey;
+        this.beerOrders = beerOrders;
     }
 
     private String customerName;
     private UUID apikey;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<BeerOrder> beerOrders;
 }
