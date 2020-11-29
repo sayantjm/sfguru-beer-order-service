@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>sayant.springframeworkguru</groupId>
-		<artifactId>sfguru-brewery-bom</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<groupId>com.github.sfg-beer-works</groupId>
+		<artifactId>sfg-brewery-bom</artifactId>
+		<version>1.0.22</version>
 	</parent>
 
 	<groupId>sayant.springframeworkguru</groupId>
