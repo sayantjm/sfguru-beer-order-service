@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrder;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.Customer;
-import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.OrderStatusEnum;
+import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.BeerOrderStatusEnum;
 import sayant.springframeworkguru.sfgurubeerorderservice.mapper.BeerOrderMapper;
 import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
 import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderPagedList;
@@ -60,7 +60,7 @@ public class BeerOrderServiceImpl implements BeerOrderService {
             BeerOrder beerOrder = beerOrderMapper.dtoToBeerOrder(beerOrderDto);
             beerOrder.setId(null); //should not be set by outside client
             beerOrder.setCustomer(customerOptional.get());
-            beerOrder.setOrderStatus(OrderStatusEnum.NEW);
+            beerOrder.setOrderStatus(BeerOrderStatusEnum.NEW);
 
             beerOrder.getBeerOrderLines().forEach(line -> line.setBeerOrder(beerOrder));
 
@@ -85,7 +85,7 @@ public class BeerOrderServiceImpl implements BeerOrderService {
     @Override
     public void pickupOrder(UUID customerId, UUID orderId) {
         BeerOrder beerOrder = getOrder(customerId, orderId);
-        beerOrder.setOrderStatus(OrderStatusEnum.PICKED_UP);
+        beerOrder.setOrderStatus(BeerOrderStatusEnum.PICKED_UP);
 
         beerOrderRepository.save(beerOrder);
     }
