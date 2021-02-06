@@ -23,6 +23,7 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
 		<hikaricp.version>3.2.0</hikaricp.version>
+		<spring.state-machine.version>2.4.0</spring.state-machine.version>
 	</properties>
 
 	<dependencies>
@@ -41,6 +42,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.statemachine</groupId>
+			<artifactId>spring-statemachine-core</artifactId>
+			<version>${spring.state-machine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
