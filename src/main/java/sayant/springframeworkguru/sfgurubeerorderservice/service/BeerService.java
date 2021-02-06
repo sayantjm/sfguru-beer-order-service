@@ -1,7 +1,6 @@
 package sayant.springframeworkguru.sfgurubeerorderservice.service;
 
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerDto;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
+import sayant.springframeworkguru.brewery.model.BeerDto;
 
 import java.util.Optional;
 import java.util.UUID;

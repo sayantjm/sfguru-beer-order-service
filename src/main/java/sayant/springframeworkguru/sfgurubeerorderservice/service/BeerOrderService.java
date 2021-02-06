@@ -1,8 +1,8 @@
 package sayant.springframeworkguru.sfgurubeerorderservice.service;
 
 import org.springframework.data.domain.Pageable;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderPagedList;
+import sayant.springframeworkguru.brewery.model.BeerOrderDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderPagedList;
 
 import java.util.UUID;
 

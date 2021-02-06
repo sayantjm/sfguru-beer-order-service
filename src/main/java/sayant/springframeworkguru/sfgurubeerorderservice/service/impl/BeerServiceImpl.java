@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerDto;
+import sayant.springframeworkguru.brewery.model.BeerDto;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerService;
 
 import java.util.Optional;

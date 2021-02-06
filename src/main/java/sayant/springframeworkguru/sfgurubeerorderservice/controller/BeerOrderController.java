@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderPagedList;
+import sayant.springframeworkguru.brewery.model.BeerOrderDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderPagedList;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderService;
 
 import java.util.UUID;

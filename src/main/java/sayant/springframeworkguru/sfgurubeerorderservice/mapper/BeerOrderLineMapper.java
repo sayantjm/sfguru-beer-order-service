@@ -3,7 +3,7 @@ package sayant.springframeworkguru.sfgurubeerorderservice.mapper;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrderLine;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderLineDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderLineDto;
 
 /**
  * Created by sayantjm on 28/6/20

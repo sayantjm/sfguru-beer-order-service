@@ -3,8 +3,8 @@ package sayant.springframeworkguru.sfgurubeerorderservice.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrderLine;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerDto;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderLineDto;
+import sayant.springframeworkguru.brewery.model.BeerDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderLineDto;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerService;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package sayant.springframeworkguru.sfgurubeerorderservice.model;
+package sayant.springframeworkguru.brewery.model;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

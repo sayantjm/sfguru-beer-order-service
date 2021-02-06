@@ -1,14 +1,13 @@
 package sayant.springframeworkguru.sfgurubeerorderservice.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sayant.springframeworkguru.sfgurubeerorderservice.bootstrap.BeerOrderBootStrap;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.Customer;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderLineDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderLineDto;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.BeerOrderRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.CustomerRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderService;

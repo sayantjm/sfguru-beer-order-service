@@ -1,10 +1,9 @@
 package sayant.springframeworkguru.sfgurubeerorderservice.mapper;
 
-import org.mapstruct.MapMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrder;
-import sayant.springframeworkguru.sfgurubeerorderservice.model.BeerOrderDto;
+import sayant.springframeworkguru.brewery.model.BeerOrderDto;
 
 /**
  * Created by sayantjm on 28/6/20
