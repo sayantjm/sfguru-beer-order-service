@@ -12,6 +12,7 @@ import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.BeerOrderE
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.BeerOrderStatusEnum;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.BeerOrderRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderManager;
+import sayant.springframeworkguru.sfgurubeerorderservice.statemachine.BeerOrderStateChangeInterceptor;
 
 import javax.transaction.Transactional;
 
@@ -22,8 +23,11 @@ import javax.transaction.Transactional;
 @Service
 public class BeerOrderManagerImpl implements BeerOrderManager {
 
+    public static final String ORDER_ID_HEADER = "ORDER_ID_HEADER";
+
     private final StateMachineFactory<BeerOrderStatusEnum, BeerOrderEventEnum> stateMachineFactory;
     private final BeerOrderRepository beerOrderRepository;
+    private final BeerOrderStateChangeInterceptor beerOrderStateChangeInterceptor;
 
     @Transactional
     @Override
@@ -39,7 +43,9 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum beerOrderEventEnum) {
         StateMachine<BeerOrderStatusEnum, BeerOrderEventEnum> sm = build(beerOrder);
 
-        Message msg = MessageBuilder.withPayload(beerOrderEventEnum).build();
+        Message msg = MessageBuilder.withPayload(beerOrderEventEnum)
+                .setHeader(ORDER_ID_HEADER, beerOrder.getId().toString())
+                .build();
 
         sm.sendEvent(msg);
     }
@@ -51,6 +57,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
         sm.getStateMachineAccessor()
                 .doWithAllRegions(sma -> {
+                    sma.addStateMachineInterceptor(beerOrderStateChangeInterceptor);
                     sma.resetStateMachine(new DefaultStateMachineContext<>(beerOrder.getOrderStatus(), null, null, null));
 
                 });
