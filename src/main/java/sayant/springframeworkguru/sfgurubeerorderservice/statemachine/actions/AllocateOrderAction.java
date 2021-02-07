@@ -6,7 +6,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
-import sayant.springframeworkguru.brewery.model.events.ValidateOrderRequest;
 import sayant.springframeworkguru.sfgurubeerorderservice.config.JmsConfig;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrder;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.BeerOrderEventEnum;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ValidateOrderAction implements Action<BeerOrderStatusEnum, BeerOrderEventEnum> {
+public class AllocateOrderAction implements Action<BeerOrderStatusEnum, BeerOrderEventEnum> {
 
     private final BeerOrderRepository beerOrderRepository;
     private final BeerOrderMapper beerOrderMapper;
@@ -31,13 +30,12 @@ public class ValidateOrderAction implements Action<BeerOrderStatusEnum, BeerOrde
 
     @Override
     public void execute(StateContext<BeerOrderStatusEnum, BeerOrderEventEnum> stateContext) {
+
         String beerOderId = (String) stateContext.getMessage().getHeaders().get(BeerOrderManagerImpl.ORDER_ID_HEADER);
         BeerOrder beerOrder = beerOrderRepository.findOneById(UUID.fromString(beerOderId));
-        jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_QUEUE, ValidateOrderRequest.builder()
-                .beerOrderDto(beerOrderMapper.beerOrderToDto(beerOrder))
-                .build()
-        );
 
-        log.debug("Sent validation request to queue(allocate-order) for order id:{}", beerOderId);
+        jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_QUEUE, beerOrderMapper.beerOrderToDto(beerOrder));
+
+        log.debug("Sent Allocation request to queue(validate-order) for order id:{}", beerOderId);
     }
 }
