@@ -1,4 +1,4 @@
-package sayant.springframeworkguru.sfgurubeerorderservice.service;
+package sayant.springframeworkguru.sfgurubeerorderservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import sayant.springframeworkguru.brewery.model.events.ValidateOrderResult;
 import sayant.springframeworkguru.sfgurubeerorderservice.config.JmsConfig;
+import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderManager;
 
 import java.util.UUID;
 
