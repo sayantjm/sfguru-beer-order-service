@@ -15,6 +15,7 @@ import sayant.springframeworkguru.brewery.model.BeerOrderDto;
 import sayant.springframeworkguru.brewery.model.BeerOrderPagedList;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.BeerOrderRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.CustomerRepository;
+import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderManager;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.BeerOrderService;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class BeerOrderServiceImpl implements BeerOrderService {
     private final CustomerRepository customerRepository;
     private final BeerOrderRepository beerOrderRepository;
     private final BeerOrderMapper beerOrderMapper;
-    private final ApplicationEventPublisher publisher;
+    private final BeerOrderManager beerOrderManager;
 
     @Override
     public BeerOrderPagedList listOrders(UUID customerId, Pageable pageable) {
@@ -64,12 +65,9 @@ public class BeerOrderServiceImpl implements BeerOrderService {
 
             beerOrder.getBeerOrderLines().forEach(line -> line.setBeerOrder(beerOrder));
 
-            BeerOrder savedBeerOrder = beerOrderRepository.saveAndFlush(beerOrder);
+            BeerOrder savedBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
-            log.debug("Saved Beer Order: " + beerOrder.getId());
-
-            //todo impl
-            //  publisher.publishEvent(new NewBeerOrderEvent(savedBeerOrder));
+            log.debug("Saved Beer Order: " + savedBeerOrder.getId());
 
             return beerOrderMapper.beerOrderToDto(savedBeerOrder);
         }
@@ -84,10 +82,7 @@ public class BeerOrderServiceImpl implements BeerOrderService {
 
     @Override
     public void pickupOrder(UUID customerId, UUID orderId) {
-        BeerOrder beerOrder = getOrder(customerId, orderId);
-        beerOrder.setOrderStatus(BeerOrderStatusEnum.PICKED_UP);
-
-        beerOrderRepository.save(beerOrder);
+        beerOrderManager.beerOrderPickerUp(orderId);
     }
 
     private BeerOrder getOrder(UUID customerId, UUID orderId){
