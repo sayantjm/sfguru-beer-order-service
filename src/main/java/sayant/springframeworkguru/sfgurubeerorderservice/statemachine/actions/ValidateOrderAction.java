@@ -15,6 +15,7 @@ import sayant.springframeworkguru.sfgurubeerorderservice.mapper.BeerOrderMapper;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.BeerOrderRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.impl.BeerOrderManagerImpl;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,12 +33,15 @@ public class ValidateOrderAction implements Action<BeerOrderStatusEnum, BeerOrde
     @Override
     public void execute(StateContext<BeerOrderStatusEnum, BeerOrderEventEnum> stateContext) {
         String beerOderId = (String) stateContext.getMessage().getHeaders().get(BeerOrderManagerImpl.ORDER_ID_HEADER);
-        BeerOrder beerOrder = beerOrderRepository.findOneById(UUID.fromString(beerOderId));
-        jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_QUEUE, ValidateOrderRequest.builder()
-                .beerOrderDto(beerOrderMapper.beerOrderToDto(beerOrder))
-                .build()
-        );
+        Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById(UUID.fromString(beerOderId));
 
-        log.debug("Sent validation request to queue(allocate-order) for order id:{}", beerOderId);
+        beerOrderOptional.ifPresentOrElse(beerOrder -> {
+            jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_QUEUE, ValidateOrderRequest.builder()
+                    .beerOrderDto(beerOrderMapper.beerOrderToDto(beerOrder))
+                    .build()
+            );
+
+            log.debug("Sent validation request to queue(validate-order) for order id:{}", beerOderId);
+        }, () -> log.error("Order Not Found:{}", beerOderId));
     }
 }

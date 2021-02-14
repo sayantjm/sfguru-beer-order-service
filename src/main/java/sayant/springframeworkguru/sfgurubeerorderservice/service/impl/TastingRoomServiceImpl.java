@@ -44,7 +44,7 @@ public class TastingRoomServiceImpl implements TastingRoomService {
 
     @Override
     @Transactional
-    @Scheduled(fixedRate = 2000) //run every 2 seconds
+    //@Scheduled(fixedRate = 2000) //run every 2 seconds
     public void placeTastingRoomOrder() {
         List<Customer> customerList = customerRepository.findAllByCustomerNameLike(BeerOrderBootStrap.TASTING_ROOM);
 
