@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jms.core.JmsTemplate;
 import sayant.springframeworkguru.brewery.model.BeerDto;
 import sayant.springframeworkguru.brewery.model.BeerOrderPagedList;
 import sayant.springframeworkguru.brewery.model.BeerPagedList;
+import sayant.springframeworkguru.brewery.model.events.AllocationFailureEvent;
+import sayant.springframeworkguru.sfgurubeerorderservice.config.JmsConfig;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrder;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.BeerOrderLine;
 import sayant.springframeworkguru.sfgurubeerorderservice.domain.Customer;
@@ -21,6 +24,7 @@ import sayant.springframeworkguru.sfgurubeerorderservice.domain.enums.BeerOrderS
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.BeerOrderRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.repository.CustomerRepository;
 import sayant.springframeworkguru.sfgurubeerorderservice.service.impl.BeerServiceImpl;
+import sayant.springframeworkguru.sfgurubeerorderservice.statemachine.actions.AllocationFailureAction;
 
 import java.util.*;
 
@@ -28,6 +32,7 @@ import static com.github.jenspiegsa.wiremockextension.ManagedWireMockServer.with
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,6 +58,9 @@ public class BeerOrderManagerImplIT {
 
     @Autowired
     WireMockServer wireMockServer;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
 
     Customer testCustomer;
 
@@ -116,7 +124,6 @@ public class BeerOrderManagerImplIT {
         BeerOrder beerOrder = createBeerOrder();
         beerOrder.setCustomerRef("fail-validation");
 
-
         BeerOrder savedBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
         await().untilAsserted(() -> {
@@ -167,6 +174,11 @@ public class BeerOrderManagerImplIT {
             BeerOrder foundOrder = beerOrderRepository.findById(beerOrder.getId()).get();
             assertEquals(BeerOrderStatusEnum.ALLOCATION_EXCEPTION, foundOrder.getOrderStatus());
         }) ;
+
+        AllocationFailureEvent allocationFailureEvent = (AllocationFailureEvent) jmsTemplate.receiveAndConvert(JmsConfig.ALLOCATE_FAILURE_QUEUE);
+
+        assertNotNull(allocationFailureEvent);
+        assertThat(allocationFailureEvent.getOrderId()).isEqualTo(savedBeerOrder.getId());
     }
 
     @Test
