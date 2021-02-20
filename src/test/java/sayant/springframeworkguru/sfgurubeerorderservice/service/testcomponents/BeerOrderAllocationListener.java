@@ -24,17 +24,20 @@ public class BeerOrderAllocationListener {
     public void listen(Message msg) {
         boolean pendingInventory = false;
         boolean allocationError = false;
+        boolean sendResponse = true;
 
         AllocateOrderRequest request = (AllocateOrderRequest) msg.getPayload();
 
-        // set pending inventory
-        if (request.getBeerOrderDto().getCustomerRef() != null && request.getBeerOrderDto().getCustomerRef().equals("partial-allocation")) {
-            pendingInventory = true;
-        }
-
-        // set allocation error
-        if (request.getBeerOrderDto().getCustomerRef() != null && request.getBeerOrderDto().getCustomerRef().equals("fail-allocation")) {
-            allocationError = true;
+        if (request.getBeerOrderDto().getCustomerRef() != null) {
+            // set allocation error
+            if ("fail-allocation".equals(request.getBeerOrderDto().getCustomerRef())){
+                allocationError = true;
+            } else if ("partial-allocation".equals(request.getBeerOrderDto().getCustomerRef())) {
+                // set pending inventory
+                pendingInventory = true;
+            } else if ("dont-allocate".equals(request.getBeerOrderDto().getCustomerRef())) {
+                sendResponse = false;
+            }
         }
 
 
@@ -48,12 +51,14 @@ public class BeerOrderAllocationListener {
 
         });
 
-        jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_RESPONSE_QUEUE,
-                AllocateOrderResult.builder()
-                        .beerOrderDto(request.getBeerOrderDto())
-                        .pendingInventory(pendingInventory)
-                        .allocationError(allocationError)
-                        .build()
-                );
+        if(sendResponse) {
+            jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_RESPONSE_QUEUE,
+                    AllocateOrderResult.builder()
+                            .beerOrderDto(request.getBeerOrderDto())
+                            .pendingInventory(pendingInventory)
+                            .allocationError(allocationError)
+                            .build()
+            );
+        }
     }
 }
