@@ -38,4 +38,4 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn -Dtest=BeerOrderManagerImplIT test
+      - run: mvn -Dtest=sayant.springframeworkguru.sfgurubeerorderservice.*Test test
