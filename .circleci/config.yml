@@ -7,5 +7,3 @@ workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
-      - store_test_results:
-          path: test-results
