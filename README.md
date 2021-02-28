@@ -2,3 +2,6 @@
 
 # Beer Order Service
 It is running on port 8081
+
+## Parameters for using mySQL and Eureka
+-Dspring.profiles.active=localmysql,local-discovery
